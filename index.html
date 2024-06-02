@@ -6,9 +6,14 @@
   <title>Zoom Level Test</title>
 </head>
 <body>
-  <script src="node_modules/zoomreta/dist/index.js"></script>
+  <script src="node_modules/zoomreta/jest.config.js"></script>
   <script>
-    console.log('Zoom Level:', zoomreta.getZoomLevel());
+    function logZoomLevel() {
+      console.log('Zoom Level:', zoomreta.getZoomLevel());
+    }
+    logZoomLevel();
+
+    window.addEventListener('scroll', logZoomLevel);
   </script>
 </body>
 </html>
