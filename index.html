@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zoom Level Test</title>
-</head>
-<body>
-  <script src="node_modules/zoomreta/jest.config.js"></script>
-  <script>
-    function logZoomLevel() {
-      console.log('Zoom Level:', zoomreta.getZoomLevel());
-    }
-    logZoomLevel();
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zoom Level Test</title>
+  </head>
+  <body>
+    <script src="node_modules/zoomreta/dist/bundle.js"></script>
+    <script>
+      function logZoomLevel(zoomLevels) {
+        console.log("Zoom Levels:", zoomLevels);
+        console.log("zoomLevelPercentage:", zoomLevels.zoomLevelPercentage);
+        console.log(
+          "zoomViaWindowDevicePixelRatio:",
+          zoomLevels.zoomViaWindowDevicePixelRatio
+        );
+        console.log("viewportZoomLevel:", zoomLevels.viewportZoomLevel);
+        console.log("isRetina:", zoomLevels.isRetina);
+      }
 
-    window.addEventListener('scroll', logZoomLevel);
-  </script>
-</body>
+      // Initial log
+      logZoomLevel(zoomreta.getAdjustedZoomLevel());
+
+      // Check for changes in zoom levels
+      zoomreta.checkForChanges(logZoomLevel, 500, { isSingleRetina: true });
+    </script>
+  </body>
 </html>
