@@ -4,26 +4,94 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zoom Level Test</title>
-  </head>
-  <body>
-    <script src="node_modules/zoomreta/dist/bundle.js"></script>
-    <script>
-      function logZoomLevel(zoomLevels) {
-        console.log("Zoom Levels:", zoomLevels);
-        console.log("zoomLevelPercentage:", zoomLevels.zoomLevelPercentage);
-        console.log(
-          "zoomViaWindowDevicePixelRatio:",
-          zoomLevels.zoomViaWindowDevicePixelRatio
-        );
-        console.log("viewportZoomLevel:", zoomLevels.viewportZoomLevel);
-        console.log("isRetina:", zoomLevels.isRetina);
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 1em;
+        text-align: left;
       }
 
-      // Initial log
-      logZoomLevel(zoomreta.getAdjustedZoomLevel());
+      table,
+      th,
+      td {
+        border: 1px solid #dddddd;
+      }
 
-      // Check for changes in zoom levels
-      zoomreta.checkForChanges(logZoomLevel, 500, { isSingleRetina: true });
+      th,
+      td {
+        padding: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Zoom Level Test</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody id="zoom-levels">
+        <tr>
+          <td>zoomLevelPercentage</td>
+          <td id="zoomLevelPercentage">N/A</td>
+        </tr>
+        <tr>
+          <td>zoomViaWindowDevicePixelRatio</td>
+          <td id="zoomViaWindowDevicePixelRatio">N/A</td>
+        </tr>
+        <tr>
+          <td>viewportZoomLevel</td>
+          <td id="viewportZoomLevel">N/A</td>
+        </tr>
+        <tr>
+          <td>effectiveZoomLevel</td>
+          <td id="effectiveZoomLevel">N/A</td>
+        </tr>
+        <tr>
+          <td>isRetina</td>
+          <td id="isRetina">N/A</td>
+        </tr>
+        <tr>
+          <td>initialDevicePixelRatio</td>
+          <td id="initialDevicePixelRatio">N/A</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script src="node_modules/zoomreta/dist/bundle.js"></script>
+    <script>
+      function updateZoomLevelTable(zoomLevels) {
+        document.getElementById("zoomLevelPercentage").textContent = zoomLevels.zoomLevelPercentage;
+        document.getElementById("zoomViaWindowDevicePixelRatio").textContent = zoomLevels.zoomViaWindowDevicePixelRatio;
+        document.getElementById("viewportZoomLevel").textContent = zoomLevels.viewportZoomLevel;
+        document.getElementById("effectiveZoomLevel").textContent = zoomLevels.effectiveZoomLevel;
+        document.getElementById("isRetina").textContent = zoomLevels.isRetina;
+        document.getElementById("initialDevicePixelRatio").textContent = zoomLevels.initialDevicePixelRatio;
+      }
+
+      function logZoomLevel(zoomLevels) {
+        console.log("Zoom Levels:", zoomLevels);
+        updateZoomLevelTable(zoomLevels);
+      }
+
+      logZoomLevel(
+        zoomreta.getAdjustedZoomLevel({
+          includeRetina: true,
+          includeZoomViaWindow: true,
+        })
+      );
+
+      zoomreta.checkForChanges(logZoomLevel, 500, {
+        oncePerStateChange: false,
+        includeRetina: true,
+        includeZoomViaWindow: true,
+        threshold: 5,
+      });
     </script>
   </body>
 </html>
